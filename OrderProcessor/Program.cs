@@ -44,11 +44,8 @@ using (var consumer = new ConsumerBuilder<string, string>(config).Build())
             // EF
             using(var context = new SimpleOrderKafkaContext())
             {
-                Order order = new Order();
+                Order order = JsonConvert.DeserializeObject<Order>(cr.Message.Value); JsonConvert.DeserializeObject<Order>(cr.Message.Value);
                 order.OrderCode = cr.Message.Key;
-                order.Created = DateTime.Now;
-                order.OrderContent = cr.Message.Value;
-                //order.UserId = 1;
 
                 context.Orders.Add(order);
                 context.SaveChanges();
